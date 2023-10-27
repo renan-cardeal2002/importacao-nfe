@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nfeProc versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+    <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+        <infNFe Id="NFe41230910541434000152550010000012411749316397" versao="4.00">
+            <ide>
+                <cUF>41</cUF>
+                <cNF>74931639</cNF>
+                <natOp>Venda</natOp>
+                <mod>55</mod>
+                <serie>1</serie>
+                <nNF>1241</nNF>
+                <dhEmi>2023-09-12T09:40:19-03:00</dhEmi>
+                <tpNF>1</tpNF>
+                <idDest>1</idDest>
+                <cMunFG>4115200</cMunFG>
+                <tpImp>1</tpImp>
+                <tpEmis>1</tpEmis>
+                <cDV>7</cDV>
+                <tpAmb>2</tpAmb>
+                <finNFe>1</finNFe>
+                <indFinal>0</indFinal>
+                <indPres>1</indPres>
+                <indIntermed>0</indIntermed>
+                <procEmi>0</procEmi>
+                <verProc>freenfe-web</verProc>
+            </ide>
+            <emit>
+                <CNPJ>10541434000152</CNPJ>
+                <xNome>EMPARI INFORMATICA LTDA</xNome>
+                <xFant>EMPARI GLOBAL INNOVATION</xFant>
+                <enderEmit>
+                    <xLgr>AVENIDA PEDRO TAQUES</xLgr>
+                    <nro>294</nro>
+                    <xCpl>EDIF ATRIUM ANDAR 4 SALA 408 SALA T N LETRA A</xCpl>
+                    <xBairro>ZONA ARMAZEM</xBairro>
+                    <cMun>4115200</cMun>
+                    <xMun>Maringa</xMun>
+                    <UF>PR</UF>
+                    <CEP>87030008</CEP>
+                    <cPais>1058</cPais>
+                    <xPais>BRASIL</xPais>
+                    <fone>4430265222</fone>
+                </enderEmit>
+                <IE>9054701753</IE>
+                <CRT>1</CRT>
+            </emit>
+            <dest>
+                <CNPJ>23903417000160</CNPJ>
+                <xNome>NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xNome>
+                <enderDest>
+                    <xLgr>AVENIDA PEDRO TAQUES</xLgr>
+                    <nro>294</nro>
+                    <xCpl>EDIF ATRIUM ANDAR 4 SALA 408 SALA T N LETRA B</xCpl>
+                    <xBairro>ZONA ARMAZEM</xBairro>
+                    <cMun>4115200</cMun>
+                    <xMun>Maringa</xMun>
+                    <UF>PR</UF>
+                    <CEP>87030008</CEP>
+                    <cPais>1058</cPais>
+                    <xPais>Brasil</xPais>
+                    <fone>1149507020</fone>
+                </enderDest>
+                <indIEDest>1</indIEDest>
+                <IE>9071311225</IE>
+            </dest>
+            <det nItem="1">
+                <prod>
+                    <cProd>1</cProd>
+                    <cEAN>78935761</cEAN>
+                    <xProd>Cigarro Carlton Dunhill Box 20 Unidades</xProd>
+                    <NCM>24022000</NCM>
+                    <CFOP>5102</CFOP>
+                    <uCom>UNID</uCom>
+                    <qCom>1.0000</qCom>
+                    <vUnCom>10.0000000000</vUnCom>
+                    <vProd>10.00</vProd>
+                    <cEANTrib>78935761</cEANTrib>
+                    <uTrib>UNID</uTrib>
+                    <qTrib>1.0000</qTrib>
+                    <vUnTrib>10.0000000000</vUnTrib>
+                    <indTot>1</indTot>
+                </prod>
+                <imposto>
+                    <vTotTrib>0.00</vTotTrib>
+                    <ICMS>
+                        <ICMSSN102>
+                            <orig>0</orig>
+                            <CSOSN>102</CSOSN>
+                        </ICMSSN102>
+                    </ICMS>
+                    <IPI>
+                        <cEnq>999</cEnq>
+                        <IPITrib>
+                            <CST>99</CST>
+                            <vBC>0.00</vBC>
+                            <pIPI>0.0000</pIPI>
+                            <vIPI>0.00</vIPI>
+                        </IPITrib>
+                    </IPI>
+                    <PIS>
+                        <PISNT>
+                            <CST>07</CST>
+                        </PISNT>
+                    </PIS>
+                    <COFINS>
+                        <COFINSNT>
+                            <CST>07</CST>
+                        </COFINSNT>
+                    </COFINS>
+                </imposto>
+            </det>
+            <det nItem="2">
+                <prod>
+                    <cProd>2</cProd>
+                    <cEAN>7898133950049</cEAN>
+                    <xProd>CONVERTEDOR DE FERRUGEM EM BASE PARA PINTURA TF7 1 Litro</xProd>
+                    <NCM>07133210</NCM>
+                    <CFOP>5102</CFOP>
+                    <uCom>UNID</uCom>
+                    <qCom>1.0000</qCom>
+                    <vUnCom>18.0000000000</vUnCom>
+                    <vProd>18.00</vProd>
+                    <vFrete>1.00</vFrete>
+                    <vSeg>1.00</vSeg>
+                    <vDesc>8.00</vDesc>
+                    <vOutro>1.00</vOutro>
+                    <cEANTrib>7898133950049</cEANTrib>
+                    <uTrib>UNID</uTrib>
+                    <qTrib>1.0000</qTrib>
+                    <vUnTrib>18.0000000000</vUnTrib>
+                    <indTot>1</indTot>
+                </prod>
+                <imposto>
+                    <vTotTrib>0.00</vTotTrib>
+                    <ICMS>
+                        <ICMSSN102>
+                            <orig>0</orig>
+                            <CSOSN>102</CSOSN>
+                        </ICMSSN102>
+                    </ICMS>
+                    <IPI>
+                        <cEnq>999</cEnq>
+                        <IPITrib>
+                            <CST>99</CST>
+                            <vBC>0.00</vBC>
+                            <pIPI>0.0000</pIPI>
+                            <vIPI>0.00</vIPI>
+                        </IPITrib>
+                    </IPI>
+                    <PIS>
+                        <PISNT>
+                            <CST>07</CST>
+                        </PISNT>
+                    </PIS>
+                    <COFINS>
+                        <COFINSNT>
+                            <CST>07</CST>
+                        </COFINSNT>
+                    </COFINS>
+                </imposto>
+            </det>
+            <total>
+                <ICMSTot>
+                    <vBC>0.00</vBC>
+                    <vICMS>0.00</vICMS>
+                    <vICMSDeson>0.00</vICMSDeson>
+                    <vFCP>0.00</vFCP>
+                    <vBCST>0.00</vBCST>
+                    <vST>0.00</vST>
+                    <vFCPST>0.00</vFCPST>
+                    <vFCPSTRet>0.00</vFCPSTRet>
+                    <vProd>28.00</vProd>
+                    <vFrete>1.00</vFrete>
+                    <vSeg>1.00</vSeg>
+                    <vDesc>8.00</vDesc>
+                    <vII>0.00</vII>
+                    <vIPI>0.00</vIPI>
+                    <vIPIDevol>0.00</vIPIDevol>
+                    <vPIS>0.00</vPIS>
+                    <vCOFINS>0.00</vCOFINS>
+                    <vOutro>1.00</vOutro>
+                    <vNF>23.00</vNF>
+                </ICMSTot>
+            </total>
+            <transp>
+                <modFrete>9</modFrete>
+            </transp>
+            <pag>
+                <detPag>
+                    <indPag>0</indPag>
+                    <tPag>90</tPag>
+                    <vPag>0.00</vPag>
+                </detPag>
+            </pag>
+            <infAdic>
+                <infCpl>Documento emitido por ME ou EPP optante pelo SIMPLES NACIONAL, nao gera direito a credito fiscal de IPI.</infCpl>
+            </infAdic>
+            <infRespTec>
+                <CNPJ>23903417000160</CNPJ>
+                <xContato>Reinaldo Adriano Dos Santos</xContato>
+                <email>suporte@treeunfe.com.br</email>
+                <fone>1149507020</fone>
+            </infRespTec>
+        </infNFe>
+        <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+            <SignedInfo>
+                <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+                <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+                <Reference URI="#NFe41230910541434000152550010000012411749316397">
+                    <Transforms>
+                        <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                        <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+                    </Transforms>
+                    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+                    <DigestValue>dXMgO/D+NPmUjoDBdkmz7PS8d1c=</DigestValue>
+                </Reference>
+            </SignedInfo>
+            <SignatureValue>czR8k2AEZsQtBwMt7cSVFS3bVO2HtpT58NySGcd8zy0mpuXPaZQznRZAt2+0kip+H98ijnpYr4Sj9+NRw58zJfw5LZMU1xfFYPmNViJscjlAcfdx+ieBdAOAR/Zfjm5r4/WJ0b0T0Rm2QmqFVWm80+z3kdJWAscUNGlKEXccv82eY48zEPdQJmdfmdln/SEwjKJ0nKm/fnaSL34RmMc4+8UxkjL9lUOgLxTJTfdaDiGyXjZgzCbW5BJSCJirN9IwcG3ksDdE5KALPxxWfbNBvVkSHkYMSt1b8n48kfSlXDJ/7c3wfti+2sKl+7Y+GC9yvUsh5Veo1qHTs7kzQW2zEA==</SignatureValue>
+            <KeyInfo>
+                <X509Data>
+                    <X509Certificate>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</X509Certificate>
+                </X509Data>
+            </KeyInfo>
+        </Signature>
+    </NFe>
+    <protNFe versao="4.00">
+        <infProt>
+            <tpAmb>2</tpAmb>
+            <verAplic>PR-v4_8_21</verAplic>
+            <chNFe>41230910541434000152550010000012411749316397</chNFe>
+            <dhRecbto>2023-09-12T09:40:20-03:00</dhRecbto><nProt>141230000702492</nProt>
+            <digVal>dXMgO/D+NPmUjoDBdkmz7PS8d1c=</digVal>
+            <cStat>100</cStat>
+            <xMotivo>Autorizado o uso da NF-e</xMotivo>
+        </infProt>
+    </protNFe>
+</nfeProc>
