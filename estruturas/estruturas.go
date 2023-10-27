@@ -1,4 +1,6 @@
-package estruturas
+package estrut
+
+import "encoding/xml"
 
 type NfeProc struct {
     XMLName xml.Name `xml:"nfeProc"`
