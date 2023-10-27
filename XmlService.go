@@ -10,19 +10,78 @@ import (
 )
 
 type ArquivoXML interface {
-    produtos(data []byte) ([]byte, error)
+	Produtos() ([]byte, error)
+	Emitente() ([]byte, error)
 }
 
-// leio o arquivo xml e retorno os dados da nfe
-func lerXml() []byte {
+type NfeParser struct {
+	data []byte
+	nfe  estrut.NfeProc
+}
+
+func NewNfeParser(data []byte) (*NfeParser, error) {
+	var nfe estrut.NfeProc
+	err := json.Unmarshal(data, &nfe)
+	if err != nil {
+		return nil, err
+	}
+
+	return &NfeParser{
+		data: data,
+		nfe:  nfe,
+	}, nil
+}
+
+func (np *NfeParser) Produtos() ([]byte, error) {
+	produtos, err := json.Marshal(np.nfe.NFe.InfNFe.Det)
+	if err != nil {
+		return nil, err
+	}
+	return produtos, nil
+}
+
+func (np *NfeParser) Emitente() ([]byte, error) {
+	emitente, err := json.Marshal(np.nfe.NFe.InfNFe.Emit)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return emitente, nil
+}
+
+func main() {
 	xmlFile, err := os.Open("./docs/41230910541434000152550010000012411749316397-nfe.xml")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer xmlFile.Close()
 
+	data, err := lerXml(xmlFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	parser, err := NewNfeParser(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	emit, err := parser.Emitente()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	prod, err := parser.Produtos()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(emit))
+	fmt.Println(string(prod))
+}
+
+func lerXml(xmlFile *os.File) ([]byte, error) {
 	var nfeProc estrut.NfeProc
-	
+
 	decoder := xml.NewDecoder(xmlFile)
 
 	for {
@@ -35,7 +94,7 @@ func lerXml() []byte {
 		case xml.StartElement:
 			if se.Name.Local == "nfeProc" {
 				if err := decoder.DecodeElement(&nfeProc, &se); err != nil {
-					log.Fatal(err)
+					return nil, err
 				}
 			}
 		}
@@ -43,48 +102,8 @@ func lerXml() []byte {
 
 	jsonData, err := json.Marshal(nfeProc)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	return jsonData
-}
-
-func emitente(data []byte) []byte {
-    var nfe estrut.NfeProc
-	
-    if err := json.Unmarshal(data, &nfe); err != nil {
-        log.Fatal(err)
-    }
-
-    emitente, err := json.Marshal(nfe.NFe.InfNFe.Emit)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-    return emitente
-}
-
-func produtos(data []byte) []byte {
-    var nfe estrut.NfeProc
-	
-    if err := json.Unmarshal(data, &nfe); err != nil {
-		log.Fatal(err)
-    }
-
-    produtos, err := json.Marshal(nfe.NFe.InfNFe.Det)
-	if err != nil {
-		log.Fatal(err)
-	}
-    
-    return produtos
-}
-
-func main() {
-    data := lerXml()
-
-    emit := emitente(data)
-    prod := produtos(data)
-
-    fmt.Println(string(emit))
-    fmt.Println(string(prod))
+	return jsonData, nil
 }
