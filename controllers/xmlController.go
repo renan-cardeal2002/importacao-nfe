@@ -8,8 +8,8 @@ import (
 	"os"
 )
 
-func buscaProdutos() ([]map[string]interface{}, error) {
-	xmlFile, err := os.Open("./docs/41230910541434000152550010000012411749316397-nfe.xml")
+func buscaProdutos(nfe string) ([]map[string]interface{}, error) {
+	xmlFile, err := os.Open("./docs/" + nfe)
 	if err != nil {
 		return nil, err
 	}
@@ -38,8 +38,8 @@ func buscaProdutos() ([]map[string]interface{}, error) {
 	return produtos, nil
 }
 
-func buscaEmitente() (map[string]interface{}, error) {
-	xmlFile, err := os.Open("./docs/41230910541434000152550010000012411749316397-nfe.xml")
+func buscaEmitente(nfe string) (map[string]interface{}, error) {
+	xmlFile, err := os.Open("./docs/" + nfe)
 	if err != nil {
 		return nil, err
 	}
@@ -68,8 +68,8 @@ func buscaEmitente() (map[string]interface{}, error) {
 	return emitente, nil
 }
 
-func buscaDestinatario() (map[string]interface{}, error) {
-	xmlFile, err := os.Open("./docs/41230910541434000152550010000012411749316397-nfe.xml")
+func buscaDestinatario(nfe string) (map[string]interface{}, error) {
+	xmlFile, err := os.Open("./docs/" + nfe)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,9 @@ func buscaDestinatario() (map[string]interface{}, error) {
 }
 
 func GetProdutos(c *gin.Context) {
-	produtos, err := buscaProdutos()
+	nfe := c.DefaultQuery("nfe", "")
+
+	produtos, err := buscaProdutos(nfe)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -109,7 +111,9 @@ func GetProdutos(c *gin.Context) {
 }
 
 func GetEmitente(c *gin.Context) {
-	emitente, err := buscaEmitente()
+	nfe := c.DefaultQuery("nfe", "")
+
+	emitente, err := buscaEmitente(nfe)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -119,7 +123,9 @@ func GetEmitente(c *gin.Context) {
 }
 
 func GetDestinatario(c *gin.Context) {
-	destinatario, err := buscaDestinatario()
+	nfe := c.DefaultQuery("nfe", "")
+
+	destinatario, err := buscaDestinatario(nfe)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -129,7 +135,10 @@ func GetDestinatario(c *gin.Context) {
 }
 
 func InserirNFE(c *gin.Context) {
-    produtos, err := buscaProdutos()
+	nfe := c.DefaultQuery("nfe", "")
+	cnpj := c.DefaultQuery("cnpj", "")
+
+    produtos, err := buscaProdutos(nfe)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
@@ -142,7 +151,7 @@ func InserirNFE(c *gin.Context) {
         return
     }
 
-	destinatario, err := buscaDestinatario()
+	destinatario, err := buscaDestinatario(nfe)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
@@ -156,14 +165,14 @@ func InserirNFE(c *gin.Context) {
     }
 
     // Insere os produtos no banco de dados
-    err = xmlService.InserirProdutos(string(prod), "10541434000152")
+    err = xmlService.InserirProdutos(string(prod), cnpj)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
 
     // Realiza outras operações, como inserção de destinatário (se necessário)
-    err = xmlService.InserirDest(string(dest), "10541434000152")
+    err = xmlService.InserirDest(string(dest), cnpj)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return

@@ -16,7 +16,7 @@ create table tbcadprodutos (
     vProd      decimal(15,2) not null,
     vCusto     decimal(15,2) not null,
     vPreco     decimal(15,2) not null,
-    vMargem    decimal(15,2) not null,
+    vMargem    decimal(15,2),
     vAdicional decimal(15,2)
 );
 
