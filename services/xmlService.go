@@ -124,22 +124,19 @@ func InserirProdutos(produtosJSON string, cnpjEmit string) error {
         qCom, qComOK := prod["QCom"].(string)
         vUnCom, vUnComOK := prod["VUnCom"].(string)
 
-		// Preciso corrigir esses valores
         vProd, vProdOK := prod["VProd"].(float64)
         vFrete := prod["VFrete"].(float64)
         vSeg := prod["VSeg"].(float64)
         vDesc := prod["VDesc"].(float64)
         vOutro := prod["VOutro"].(float64)
 
-        vCusto := vProd + vFrete + vSeg + vDesc + vOutro
-        vMargem, vMargemOK := prod["VMargem"].(float64)
+        vCusto := vProd + vFrete + vSeg + vOutro + vDesc
+        vMargem := prod["VMargem"].(float64)
 
         vPreco := vCusto + vMargem
-        vAdicional, vAdicionalOK := prod["VAdicional"].(string)
+        vAdicional := prod["VAdicional"].(string)
 
-		fmt.Println(vCusto, vMargemOK, vAdicionalOK)
-
-        if cProdOK && cEANOK && xProdOK && uComOK && qComOK && vUnComOK && vProdOK && vMargemOK && vAdicionalOK {
+        if cProdOK && cEANOK && xProdOK && uComOK && qComOK && vUnComOK && vProdOK {
             _, err := db.Exec(insertStatement, empresaID, cProd, cEAN, xProd, uCom, qCom, vUnCom, vProd, vCusto, vPreco, vMargem, vAdicional)
             if err != nil {
                 return err
