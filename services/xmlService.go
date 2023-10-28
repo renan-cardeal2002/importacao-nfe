@@ -3,15 +3,15 @@ package xmlService
 import (
 	"encoding/xml"
 	"encoding/json"
-	"fmt"
 	"log"
-	"os"
 	"importa-nfe/estruturas"
+	"os"
 )
 
 type ArquivoXML interface {
 	Produtos() ([]byte, error)
 	Emitente() ([]byte, error)
+	Destinatario() ([]byte, error)
 }
 
 type NfeParser struct {
@@ -48,37 +48,13 @@ func (np *NfeParser) Emitente() ([]byte, error) {
 	return emitente, nil
 }
 
-func main() {
-	xmlFile, err := os.Open("./docs/41230910541434000152550010000012411749316397-nfe.xml")
+func (np *NfeParser) Destinatario() ([]byte, error) {
+	destinatario, err := json.Marshal(np.nfe.NFe.InfNFe.Dest)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer xmlFile.Close()
-
-	data, err := LerXml(xmlFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	parser, err := NewNfeParser(data)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	emit, err := parser.Emitente()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	prod, err := parser.Produtos()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(string(emit))
-	fmt.Println(string(prod))
+	return destinatario, nil
 }
-
 
 func LerXml(xmlFile *os.File) ([]byte, error) {
 	var nfeProc estrut.NfeProc
