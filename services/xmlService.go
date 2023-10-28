@@ -114,8 +114,6 @@ func InserirProdutos(produtosJSON string, cnpjEmit string) error {
             return err
         }
 
-        fmt.Println(countEan)
-
         if countEan > 0 {
             return errors.New("EAN já existente")
         }
@@ -127,14 +125,21 @@ func InserirProdutos(produtosJSON string, cnpjEmit string) error {
         vUnCom, vUnComOK := prod["VUnCom"].(string)
 
 		// Preciso corrigir esses valores
-        vProd, vProdOK := prod["VProd"].(string)
-        vCusto, vCustoOK := prod["VCusto"].(string)
-        vPreco, vPrecoOK := prod["VPreco"].(string)
-        vMargem, vMargemOK := prod["VMargem"].(string)
+        vProd, vProdOK := prod["VProd"].(float64)
+        vFrete := prod["VFrete"].(float64)
+        vSeg := prod["VSeg"].(float64)
+        vDesc := prod["VDesc"].(float64)
+        vOutro := prod["VOutro"].(float64)
+
+        vCusto := vProd + vFrete + vSeg + vDesc + vOutro
+        vMargem, vMargemOK := prod["VMargem"].(float64)
+
+        vPreco := vCusto + vMargem
         vAdicional, vAdicionalOK := prod["VAdicional"].(string)
 
-        if cProdOK && cEANOK && xProdOK && uComOK && qComOK && vUnComOK && vProdOK &&
-           vCustoOK && vPrecoOK && vMargemOK && vAdicionalOK {
+		fmt.Println(vCusto, vMargemOK, vAdicionalOK)
+
+        if cProdOK && cEANOK && xProdOK && uComOK && qComOK && vUnComOK && vProdOK && vMargemOK && vAdicionalOK {
             _, err := db.Exec(insertStatement, empresaID, cProd, cEAN, xProd, uCom, qCom, vUnCom, vProd, vCusto, vPreco, vMargem, vAdicional)
             if err != nil {
                 return err
