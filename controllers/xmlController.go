@@ -112,3 +112,12 @@ func GetDestinatario(c *gin.Context) {
 
     c.IndentedJSON(http.StatusOK, destinatario)
 }
+
+func InserirNFE(c *gin.Context) {
+	xmlService.VerificarEmit("10541434000152", "10541434000152")
+	// xmlService.InserirProdutos()
+	// xmlService.InserirDest()
+
+    data := gin.H{"mensagem": "NFe inserida com sucesso"}
+    c.IndentedJSON(http.StatusOK, data)
+}
