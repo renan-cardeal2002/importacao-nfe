@@ -25,6 +25,14 @@ Acho que é isso, foi uma ótima esperiencia utilizar o Golang, e creio que tenh
 
 ## Requisitos
 
+```bash
+# Clone o repositório
+git clone https://github.com/renan-cardeal2002/importacao-nfe
+
+# Inicie a aplicação
+go run .
+```
+
 Para rodar essa aplicação, tentei utilizar o máximo bibliotecas nativas, porém tive que instalar duas externas, para rodar a api e obter o JWT de login.
 - "github.com/dgrijalva/jwt-go"
 - "github.com/gin-gonic/gin"
@@ -34,9 +42,3 @@ Para rodar essa aplicação, tentei utilizar o máximo bibliotecas nativas, por�
 - Informe o cnpj logado pelo parametro da url (cnpj)
     exemplo: http://localhost:8080/inserirNfe?nfe=41230910541434000152550010000012411749316397-nfe.xml&cnpj=10541434000152
 
-```bash
-# Clone o repositório
-git clone https://github.com/renan-cardeal2002/importacao-nfe
-
-# Inicie a aplicação
-go run .
