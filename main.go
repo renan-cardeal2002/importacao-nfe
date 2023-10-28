@@ -69,7 +69,7 @@ func getEmitente(c *gin.Context) {
 		return
 	}
 
-	var emitente []map[string]interface{}
+	var emitente map[string]interface{}
 	if err := json.Unmarshal(emit, &emitente); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
