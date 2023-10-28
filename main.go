@@ -1,0 +1,87 @@
+package main
+
+import (
+	"encoding/json"
+    "net/http"
+    "github.com/gin-gonic/gin"
+	"importa-nfe/services"
+	"os"
+)
+
+func getProdutos(c *gin.Context) {
+	xmlFile, err := os.Open("./docs/41230910541434000152550010000012411749316397-nfe.xml")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	defer xmlFile.Close()
+
+	data, err := xmlService.LerXml(xmlFile)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	parser, err := xmlService.NewNfeParser(data)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	prod, err := parser.Produtos()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	var produtos []map[string]interface{}
+	if err := json.Unmarshal(prod, &produtos); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+    c.IndentedJSON(http.StatusOK, produtos)
+}
+
+func getEmitente(c *gin.Context) {
+	xmlFile, err := os.Open("./docs/41230910541434000152550010000012411749316397-nfe.xml")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	defer xmlFile.Close()
+
+	data, err := xmlService.LerXml(xmlFile)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	parser, err := xmlService.NewNfeParser(data)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	emit, err := parser.Emitente()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	var emitente []map[string]interface{}
+	if err := json.Unmarshal(emit, &emitente); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+    c.IndentedJSON(http.StatusOK, emitente)
+}
+
+func main() {
+    router := gin.Default()
+    router.GET("/produtos", getProdutos)
+    router.GET("/emitente", getEmitente)
+
+    router.Run("localhost:8080")
+}

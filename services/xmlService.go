@@ -1,4 +1,4 @@
-package main
+package xmlService
 
 import (
 	"encoding/xml"
@@ -55,7 +55,7 @@ func main() {
 	}
 	defer xmlFile.Close()
 
-	data, err := lerXml(xmlFile)
+	data, err := LerXml(xmlFile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -79,7 +79,8 @@ func main() {
 	fmt.Println(string(prod))
 }
 
-func lerXml(xmlFile *os.File) ([]byte, error) {
+
+func LerXml(xmlFile *os.File) ([]byte, error) {
 	var nfeProc estrut.NfeProc
 
 	decoder := xml.NewDecoder(xmlFile)
@@ -107,3 +108,32 @@ func lerXml(xmlFile *os.File) ([]byte, error) {
 
 	return jsonData, nil
 }
+
+// func lerXml(xmlFile *os.File) ([]byte, error) {
+// 	var nfeProc estrut.NfeProc
+
+// 	decoder := xml.NewDecoder(xmlFile)
+
+// 	for {
+// 		token, err := decoder.Token()
+// 		if err != nil {
+// 			break
+// 		}
+
+// 		switch se := token.(type) {
+// 		case xml.StartElement:
+// 			if se.Name.Local == "nfeProc" {
+// 				if err := decoder.DecodeElement(&nfeProc, &se); err != nil {
+// 					return nil, err
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	jsonData, err := json.Marshal(nfeProc)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return jsonData, nil
+// }
