@@ -1,4 +1,3 @@
-// database/database.go
 package database
 
 import (
@@ -7,12 +6,10 @@ import (
     "log"
 )
 
-// ConexaoBd estabelece e retorna uma conexão com o banco de dados
 func ConexaoBd() *sql.DB {
     // Configurar informações de conexão com o banco de dados
     dsn := "root@tcp(localhost:3306)/importanfe"
 
-    // Abrir uma conexão com o banco de dados
     db, err := sql.Open("mysql", dsn)
     if err != nil {
         log.Fatal(err)

@@ -76,6 +76,7 @@ type Prod struct {
     UCom    string   `xml:"uCom"`
     QCom    string   `xml:"qCom"`
     VUnCom  string   `xml:"vUnCom"`
+    VProd   float64  `xml:"vProd"`  
     VFrete  float64  `xml:"vFrete"`
     VSeg    float64  `xml:"vSeg"`
     VDesc   float64  `xml:"vDesc"`
