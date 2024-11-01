@@ -59,10 +59,11 @@ func InserirProdutos(produtosJSON string, cnpjEmit string) error {
 		vOutro := prod["VOutro"].(float64)
 
 		vCusto := vProd + vFrete + vSeg + vOutro + vDesc
-		vMargem := prod["VMargem"].(float64)
+
+		vMargem := 0.0 //prod["VMargem"].(float64)
 
 		vPreco := vCusto + vMargem
-		vAdicional := prod["VAdicional"].(string)
+		vAdicional := 0.0 //prod["VAdicional"].(string)
 
 		if cProdOK && cEANOK && xProdOK && uComOK && qComOK && vUnComOK && vProdOK {
 			_, err := db.Exec(insertStatement, empresaID, cProd, cEAN, xProd, uCom, qCom, vUnCom, vProd, vCusto, vPreco, vMargem, vAdicional)

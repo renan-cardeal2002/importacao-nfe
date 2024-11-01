@@ -7,15 +7,17 @@ import (
 )
 
 func Connect() *sql.DB {
-	dsn := "root@tcp(localhost:3306)/importanfe"
+	dsn := "myuser:mypassword@tcp(localhost:3306)/importanfe"
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		_ = fmt.Errorf("erro ao realizar conexão ao banco")
+		fmt.Println("erro ao realizar conexão ao banco:", err)
+		return nil
 	}
 
 	if err = db.Ping(); err != nil {
-		_ = fmt.Errorf("erro ao realizar conexão ao banco")
+		fmt.Println("erro ao realizar conexão ao banco:", err)
+		return nil
 	}
 
 	return db
