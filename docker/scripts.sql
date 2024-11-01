@@ -19,11 +19,10 @@ create table tbcadprodutos (
     vMargem    decimal(15,2),
     vAdicional decimal(15,2)
 );
-
 alter table tbcadprodutos
-add constraint fk_empresa
-foreign key (id_empresa)
-references tbcadempresa (id);
+    add constraint fk_empresa
+        foreign key (id_empresa)
+            references tbcadempresa (id);
 
 
 create table tbcadcliente (
@@ -40,8 +39,7 @@ create table tbcadcliente (
     CEP varchar(11),
     fone varchar(15)
 );
-
 alter table tbcadcliente
-add constraint fk_empresa_cliente
-foreign key (id_empresa)
-references tbcadempresa (id);
+    add constraint fk_empresa_cliente
+        foreign key (id_empresa)
+            references tbcadempresa (id);

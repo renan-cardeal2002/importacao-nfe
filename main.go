@@ -1,17 +1,20 @@
 package main
 
 import (
-    "github.com/gin-gonic/gin"
-	"importa-nfe/controllers"
+	"github.com/gin-gonic/gin"
+	"importa-nfe/src/controllers"
 )
 
 func main() {
-    router := gin.Default()
-    router.GET("/produtos", xmlController.GetProdutos)
-    router.GET("/emitente", xmlController.GetEmitente)
-    router.GET("/destinatario", xmlController.GetDestinatario)
+	router := gin.Default()
 
-    router.GET("/inserirNfe", xmlController.InserirNFE)
+	router.GET("/inserirNfe", controllers.InserirNFE)
+	router.GET("/produtos", controllers.GetProdutos)
+	router.GET("/emitente", controllers.GetEmitente)
+	router.GET("/destinatario", controllers.GetDestinatario)
 
-    router.Run("localhost:8080")
+	err := router.Run("localhost:2000")
+	if err != nil {
+		return
+	}
 }
