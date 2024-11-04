@@ -1,10 +1,10 @@
-package repositories
+package repository
 
 import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	database "importa-nfe/internal/connection"
+	database "importa-nfe/internal/infrastructure/configuration"
 )
 
 func InserirProdutos(produtosJSON string, cnpjEmit string) error {

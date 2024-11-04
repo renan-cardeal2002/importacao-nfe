@@ -1,10 +1,10 @@
-package repositories
+package repository
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	database "importa-nfe/internal/connection"
+	database "importa-nfe/internal/infrastructure/configuration"
 )
 
 func InserirDest(destinatarioJSON string, cnpjEmit string) error {

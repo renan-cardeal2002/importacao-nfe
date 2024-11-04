@@ -3,9 +3,9 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"importa-nfe/internal/helper"
-	"importa-nfe/internal/repositories"
-	"importa-nfe/internal/services"
+	"importa-nfe/internal/infrastructure/adapter/outbound/repository"
+	xmlService "importa-nfe/internal/services"
+	"importa-nfe/pkg"
 	"net/http"
 	"os"
 )
@@ -23,12 +23,12 @@ func buscaProdutos(nfe string) ([]map[string]interface{}, error) {
 	}
 	defer xmlFile.Close()
 
-	xml, err := helper.ReadXML(xmlFile)
+	xml, err := pkg.ReadXML(xmlFile)
 	if err != nil {
 		return nil, err
 	}
 
-	parser, err := helper.NewNfeParser(xml)
+	parser, err := pkg.NewNfeParser(xml)
 	if err != nil {
 		return nil, err
 	}
@@ -53,12 +53,12 @@ func buscaEmitente(nfe string) (map[string]interface{}, error) {
 	}
 	defer xmlFile.Close()
 
-	data, err := helper.ReadXML(xmlFile)
+	data, err := pkg.ReadXML(xmlFile)
 	if err != nil {
 		return nil, err
 	}
 
-	parser, err := helper.NewNfeParser(data)
+	parser, err := pkg.NewNfeParser(data)
 	if err != nil {
 		return nil, err
 	}
@@ -83,12 +83,12 @@ func buscaDestinatario(nfe string) (map[string]interface{}, error) {
 	}
 	defer xmlFile.Close()
 
-	data, err := helper.ReadXML(xmlFile)
+	data, err := pkg.ReadXML(xmlFile)
 	if err != nil {
 		return nil, err
 	}
 
-	parser, err := helper.NewNfeParser(data)
+	parser, err := pkg.NewNfeParser(data)
 	if err != nil {
 		return nil, err
 	}
@@ -170,13 +170,13 @@ func (h ImportationController) InserirNFE(c *gin.Context) {
 		return
 	}
 
-	err = repositories.InserirProdutos(string(prod), cnpj)
+	err = repository.InserirProdutos(string(prod), cnpj)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = repositories.InserirDest(string(dest), cnpj)
+	err = repository.InserirDest(string(dest), cnpj)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

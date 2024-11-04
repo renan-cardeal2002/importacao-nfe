@@ -1,10 +1,10 @@
-package helper
+package pkg
 
 import (
 	"encoding/json"
 	"encoding/xml"
-	"importa-nfe/internal/controllers/mapper"
-	"importa-nfe/internal/domain"
+	"importa-nfe/internal/core/domain"
+	"importa-nfe/internal/infrastructure/adapter/inbound/controllers/mapper"
 	"os"
 )
 

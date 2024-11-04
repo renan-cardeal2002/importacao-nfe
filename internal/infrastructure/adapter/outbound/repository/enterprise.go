@@ -1,8 +1,8 @@
-package repositories
+package repository
 
 import (
 	"fmt"
-	database "importa-nfe/internal/connection"
+	database "importa-nfe/internal/infrastructure/configuration"
 )
 
 func VerificarEmit(cnpjEmit string, cnpjLogado string) error {

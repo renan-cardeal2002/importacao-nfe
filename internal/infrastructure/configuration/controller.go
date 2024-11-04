@@ -1,6 +1,8 @@
 package configuration
 
-import "importa-nfe/internal/controllers"
+import (
+	"importa-nfe/internal/infrastructure/adapter/inbound/controllers"
+)
 
 type Handler struct {
 	Importation controllers.ImportationController
