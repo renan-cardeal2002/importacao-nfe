@@ -1,4 +1,4 @@
-package xmlService
+package service
 
 import (
 	"fmt"

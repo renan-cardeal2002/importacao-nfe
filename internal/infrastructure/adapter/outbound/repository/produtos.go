@@ -4,18 +4,20 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	database "importa-nfe/internal/infrastructure/configuration"
+	"importa-nfe/internal/core/ports"
 )
 
-func InserirProdutos(produtosJSON string, cnpjEmit string) error {
-	db := database.Connect()
-	defer func(db *sql.DB) {
-		err := db.Close()
-		if err != nil {
-			return
-		}
-	}(db)
+type produtosRepository struct {
+	db *sql.DB
+}
 
+func NewProdutosRepository(db *sql.DB) ports.ProdutosRepository {
+	return produtosRepository{
+		db: db,
+	}
+}
+
+func (r produtosRepository) InserirProdutos(produtosJSON string, cnpjEmit string) error {
 	var produtos []map[string]interface{}
 	if err := json.Unmarshal([]byte(produtosJSON), &produtos); err != nil {
 		return err
@@ -24,7 +26,7 @@ func InserirProdutos(produtosJSON string, cnpjEmit string) error {
 	query := "SELECT id FROM tbcadempresa WHERE cnpj = ?"
 	var empresaID int
 
-	err := db.QueryRow(query, cnpjEmit).Scan(&empresaID)
+	err := r.db.QueryRow(query, cnpjEmit).Scan(&empresaID)
 	if err != nil {
 		return err
 	}
@@ -42,7 +44,7 @@ func InserirProdutos(produtosJSON string, cnpjEmit string) error {
 		query = "SELECT count(1) as count FROM tbcadprodutos WHERE cEAN = ?"
 		var countEan int
 
-		err = db.QueryRow(query, cEAN).Scan(&countEan)
+		err = r.db.QueryRow(query, cEAN).Scan(&countEan)
 		if err != nil {
 			return err
 		}
@@ -70,7 +72,7 @@ func InserirProdutos(produtosJSON string, cnpjEmit string) error {
 		vPreco := vCusto + vMargem
 		vAdicional := 0.0 // VMargem não está presente no xml
 
-		_, err = db.Exec(insertStatement, empresaID, cProd, cEAN, xProd, uCom, qCom, vUnCom, vProd, vCusto, vPreco, vMargem, vAdicional)
+		_, err = r.db.Exec(insertStatement, empresaID, cProd, cEAN, xProd, uCom, qCom, vUnCom, vProd, vCusto, vPreco, vMargem, vAdicional)
 		if err != nil {
 			return err
 		}

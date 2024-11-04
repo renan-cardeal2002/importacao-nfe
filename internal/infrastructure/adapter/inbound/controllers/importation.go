@@ -3,17 +3,22 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"importa-nfe/internal/infrastructure/adapter/outbound/repository"
+	"importa-nfe/internal/core/ports"
 	xmlService "importa-nfe/internal/services"
 	"importa-nfe/pkg"
 	"net/http"
 	"os"
 )
 
-type ImportationController struct{}
+type ImportationController struct {
+	produtosRepository     ports.ProdutosRepository
+	destinatarioRepository ports.DestinatarioRepository
+}
 
-func NewImportationHandler() ImportationController {
-	return ImportationController{}
+func NewImportationHandler(produtosRepository ports.ProdutosRepository) ImportationController {
+	return ImportationController{
+		produtosRepository: produtosRepository,
+	}
 }
 
 func buscaProdutos(nfe string) ([]map[string]interface{}, error) {
@@ -170,13 +175,13 @@ func (h ImportationController) InserirNFE(c *gin.Context) {
 		return
 	}
 
-	err = repository.InserirProdutos(string(prod), cnpj)
+	err = h.produtosRepository.InserirProdutos(string(prod), cnpj)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = repository.InserirDest(string(dest), cnpj)
+	err = h.destinatarioRepository.InserirDest(string(dest), cnpj)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

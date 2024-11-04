@@ -1,16 +1,24 @@
 package repository
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
-	database "importa-nfe/internal/infrastructure/configuration"
+	"importa-nfe/internal/core/ports"
 )
 
-func InserirDest(destinatarioJSON string, cnpjEmit string) error {
-	db := database.Connect()
-	defer db.Close()
+type destinatarioRepository struct {
+	db *sql.DB
+}
 
+func NewDestinatarioRepository(db *sql.DB) ports.DestinatarioRepository {
+	return destinatarioRepository{
+		db: db,
+	}
+}
+
+func (r destinatarioRepository) InserirDest(destinatarioJSON string, cnpjEmit string) error {
 	var destinatario map[string]interface{}
 	if err := json.Unmarshal([]byte(destinatarioJSON), &destinatario); err != nil {
 		return err
@@ -19,7 +27,7 @@ func InserirDest(destinatarioJSON string, cnpjEmit string) error {
 	query := "SELECT id FROM tbcadempresa WHERE cnpj = ?"
 	var empresaID int
 
-	err := db.QueryRow(query, cnpjEmit).Scan(&empresaID)
+	err := r.db.QueryRow(query, cnpjEmit).Scan(&empresaID)
 	if err != nil {
 		return err
 	}
@@ -46,7 +54,7 @@ func InserirDest(destinatarioJSON string, cnpjEmit string) error {
 	fmt.Println(cnpjOK, xNomeOK, emailOK, xLgrOK, nroOK, xCplOK, xBairroOK, cMunOK, CEPOK, foneOK)
 
 	if cnpjOK && xNomeOK && emailOK && xLgrOK && nroOK && xCplOK && xBairroOK && cMunOK && CEPOK && foneOK {
-		_, err := db.Exec(insertStatement, empresaID, cnpj, xNome, email, xLgr, nro, xCpl, xBairro, cMun, CEP, fone)
+		_, err := r.db.Exec(insertStatement, empresaID, cnpj, xNome, email, xLgr, nro, xCpl, xBairro, cMun, CEP, fone)
 		if err != nil {
 			return err
 		}

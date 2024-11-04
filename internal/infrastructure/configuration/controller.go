@@ -8,8 +8,8 @@ type Handler struct {
 	Importation controllers.ImportationController
 }
 
-func NewHandler() Handler {
+func NewHandler(port *Port) Handler {
 	return Handler{
-		Importation: controllers.NewImportationHandler(),
+		Importation: controllers.NewImportationHandler(port.produtosRepository),
 	}
 }
