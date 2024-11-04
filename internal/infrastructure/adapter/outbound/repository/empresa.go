@@ -18,7 +18,7 @@ func NewEmpresaRepository(db *sql.DB) ports.EmpresaRepository {
 }
 
 func (r empresaRepository) FindByCNPJ(ctx context.Context, CNPJ string) (domain.Empresa, error) {
-	query := "SELECT id, cnpj FROM empresa WHERE cnpj = $1"
+	query := "SELECT id, cnpj FROM empresa WHERE cnpj = ?"
 
 	var empresa domain.Empresa
 

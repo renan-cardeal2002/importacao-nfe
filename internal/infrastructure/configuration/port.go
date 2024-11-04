@@ -10,6 +10,7 @@ type Port struct {
 	produtosRepository     ports.ProdutosRepository
 	destinatarioRepository ports.DestinatarioRepository
 	empresaRepository      ports.EmpresaRepository
+	transactionManager     ports.TransactionManager
 }
 
 func NewPort() (*Port, error) {
@@ -22,10 +23,12 @@ func NewPort() (*Port, error) {
 	produtosRepository := repository.NewProdutosRepository(db)
 	destinatarioRepository := repository.NewDestinatarioRepository(db)
 	empresaRepository := repository.NewEmpresaRepository(db)
+	transactionManager := repository.NewTransactionManager(db)
 
 	return &Port{
 		produtosRepository:     produtosRepository,
 		destinatarioRepository: destinatarioRepository,
 		empresaRepository:      empresaRepository,
+		transactionManager:     transactionManager,
 	}, nil
 }

@@ -2,11 +2,13 @@ package ports
 
 import (
 	"context"
+	"database/sql"
 	"importa-nfe/internal/core/domain"
 )
 
 type ProdutosRepository interface {
-	InserirProdutos(produtosJSON string, CNPJ string) error
+	FindProdutosByEmpresaID(ctx context.Context, EmpresaID int) ([]domain.Produto, error)
+	InserirProdutos(ctx context.Context, produtosJSON string, EmpresaID int) error
 }
 
 type DestinatarioRepository interface {
@@ -15,4 +17,10 @@ type DestinatarioRepository interface {
 
 type EmpresaRepository interface {
 	FindByCNPJ(ctx context.Context, CNPJ string) (domain.Empresa, error)
+}
+
+type TransactionManager interface {
+	Begin(ctx context.Context) (*sql.Tx, error)
+	Commit(tx *sql.Tx) error
+	Rollback(tx *sql.Tx) error
 }

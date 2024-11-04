@@ -6,10 +6,10 @@ type Produto struct {
 	EAN            string
 	CodProduto     string
 	DescrProduto   string
-	uCom           string // verificar campo
-	Quantidade     int
-	vUnCom         float64 // verificar campo
-	ValorUnitario  float64
+	UnidadeMedida  string
+	Quantidade     float64
+	PrecoUnitario  float64
+	PrecoBruto     float64
 	Custo          float64
 	Preco          float64
 	Margem         float64

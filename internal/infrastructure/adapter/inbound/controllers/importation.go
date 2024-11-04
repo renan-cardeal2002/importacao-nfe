@@ -8,19 +8,22 @@ import (
 	"importa-nfe/pkg"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 type ImportationController struct {
 	produtosRepository     ports.ProdutosRepository
 	destinatarioRepository ports.DestinatarioRepository
 	empresaRepository      ports.EmpresaRepository
+	transactionManager     ports.TransactionManager
 }
 
-func NewImportationHandler(produtosRepository ports.ProdutosRepository, destinatarioRepository ports.DestinatarioRepository, empresaRepository ports.EmpresaRepository) ImportationController {
+func NewImportationHandler(produtosRepository ports.ProdutosRepository, destinatarioRepository ports.DestinatarioRepository, empresaRepository ports.EmpresaRepository, transactionManager ports.TransactionManager) ImportationController {
 	return ImportationController{
 		produtosRepository:     produtosRepository,
 		destinatarioRepository: destinatarioRepository,
 		empresaRepository:      empresaRepository,
+		transactionManager:     transactionManager,
 	}
 }
 
@@ -47,7 +50,7 @@ func buscaProdutos(nfe string) ([]map[string]interface{}, error) {
 	}
 
 	var produtos []map[string]interface{}
-	if err := json.Unmarshal(prod, &produtos); err != nil {
+	if err = json.Unmarshal(prod, &produtos); err != nil {
 		return nil, err
 	}
 
@@ -115,9 +118,15 @@ func buscaDestinatario(nfe string) (map[string]interface{}, error) {
 }
 
 func (h ImportationController) GetProdutos(c *gin.Context) {
-	nfe := c.DefaultQuery("nfe", "")
+	ctx := c.Request.Context()
+	empresaIDStr := c.DefaultQuery("empresa_id", "")
+	empresaID, err := strconv.Atoi(empresaIDStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "empresa_id precisa ser um número válido"})
+		return
+	}
 
-	produtos, err := buscaProdutos(nfe)
+	produtos, err := h.produtosRepository.FindProdutosByEmpresaID(ctx, empresaID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -157,6 +166,10 @@ func (h ImportationController) InserirNFE(c *gin.Context) {
 	cnpj := c.DefaultQuery("cnpj", "")
 
 	empresa, err := h.empresaRepository.FindByCNPJ(ctx, cnpj)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
 	produtos, err := buscaProdutos(nfe)
 	if err != nil {
@@ -176,24 +189,38 @@ func (h ImportationController) InserirNFE(c *gin.Context) {
 		return
 	}
 
-	_, err = json.Marshal(destinatario)
+	dest, err := json.Marshal(destinatario)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = h.produtosRepository.InserirProdutos(string(prod), cnpj)
+	tx, err := h.transactionManager.Begin(ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = h.destinatarioRepository.InserirDest(ctx, empresa.ID, empresa.CNPJ)
+	stringProd := string(prod)
+	err = h.produtosRepository.InserirProdutos(ctx, stringProd, empresa.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		_ = h.transactionManager.Rollback(tx)
+		return
+	}
+
+	err = h.destinatarioRepository.InserirDest(ctx, empresa.ID, string(dest))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		_ = h.transactionManager.Rollback(tx)
+		return
+	}
+
+	err = h.transactionManager.Commit(tx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	data := gin.H{"mensagem": "NFe inserida com sucesso"}
-	c.IndentedJSON(http.StatusOK, data)
+	c.IndentedJSON(http.StatusOK, gin.H{"mensagem": "NFe inserida com sucesso"})
 }
