@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"fmt"
-	database "importa-nfe/src/connection"
+	database "importa-nfe/internal/connection"
 )
 
 func VerificarEmit(cnpjEmit string, cnpjLogado string) error {

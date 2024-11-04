@@ -2,7 +2,7 @@ package xmlService
 
 import (
 	"encoding/json"
-	"importa-nfe/src/domain"
+	"importa-nfe/internal/domain"
 	"log"
 )
 

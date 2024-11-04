@@ -1,6 +1,6 @@
 package domain
 
-import "importa-nfe/src/controllers/mapper"
+import "importa-nfe/internal/controllers/mapper"
 
 type NfeParser struct {
 	Data []byte

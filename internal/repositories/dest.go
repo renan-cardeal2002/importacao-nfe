@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	database "importa-nfe/src/connection"
+	database "importa-nfe/internal/connection"
 )
 
 func InserirDest(destinatarioJSON string, cnpjEmit string) error {
@@ -16,7 +16,6 @@ func InserirDest(destinatarioJSON string, cnpjEmit string) error {
 		return err
 	}
 
-	// Busqa o ID da empresa destinatario com base no CNPJ
 	query := "SELECT id FROM tbcadempresa WHERE cnpj = ?"
 	var empresaID int
 
@@ -52,7 +51,7 @@ func InserirDest(destinatarioJSON string, cnpjEmit string) error {
 			return err
 		}
 	} else {
-		return errors.New("Dados de destinatário inválidos")
+		return errors.New("dados de destinatário inválidos")
 	}
 
 	return nil

@@ -3,12 +3,18 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"importa-nfe/src/helper"
-	"importa-nfe/src/repositories"
-	"importa-nfe/src/services"
+	"importa-nfe/internal/helper"
+	"importa-nfe/internal/repositories"
+	"importa-nfe/internal/services"
 	"net/http"
 	"os"
 )
+
+type ImportationController struct{}
+
+func NewImportationHandler() ImportationController {
+	return ImportationController{}
+}
 
 func buscaProdutos(nfe string) ([]map[string]interface{}, error) {
 	xmlFile, err := os.Open("./docs/" + nfe)
@@ -100,7 +106,7 @@ func buscaDestinatario(nfe string) (map[string]interface{}, error) {
 	return destinatario, nil
 }
 
-func GetProdutos(c *gin.Context) {
+func (h ImportationController) GetProdutos(c *gin.Context) {
 	nfe := c.DefaultQuery("nfe", "")
 
 	produtos, err := buscaProdutos(nfe)
@@ -112,7 +118,7 @@ func GetProdutos(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, produtos)
 }
 
-func GetEmitente(c *gin.Context) {
+func (h ImportationController) GetEmitente(c *gin.Context) {
 	nfe := c.DefaultQuery("nfe", "")
 
 	emitente, err := buscaEmitente(nfe)
@@ -124,7 +130,7 @@ func GetEmitente(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, emitente)
 }
 
-func GetDestinatario(c *gin.Context) {
+func (h ImportationController) GetDestinatario(c *gin.Context) {
 	nfe := c.DefaultQuery("nfe", "")
 
 	destinatario, err := buscaDestinatario(nfe)
@@ -136,7 +142,7 @@ func GetDestinatario(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, destinatario)
 }
 
-func InserirNFE(c *gin.Context) {
+func (h ImportationController) InserirNFE(c *gin.Context) {
 	nfe := c.DefaultQuery("nfe", "")
 	cnpj := c.DefaultQuery("cnpj", "")
 

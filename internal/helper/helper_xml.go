@@ -3,8 +3,8 @@ package helper
 import (
 	"encoding/json"
 	"encoding/xml"
-	"importa-nfe/src/controllers/mapper"
-	"importa-nfe/src/domain"
+	"importa-nfe/internal/controllers/mapper"
+	"importa-nfe/internal/domain"
 	"os"
 )
 

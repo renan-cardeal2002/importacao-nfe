@@ -1,14 +1,20 @@
 package repositories
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
-	database "importa-nfe/src/connection"
+	database "importa-nfe/internal/connection"
 )
 
 func InserirProdutos(produtosJSON string, cnpjEmit string) error {
 	db := database.Connect()
-	defer db.Close()
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+			return
+		}
+	}(db)
 
 	var produtos []map[string]interface{}
 	if err := json.Unmarshal([]byte(produtosJSON), &produtos); err != nil {
@@ -31,13 +37,12 @@ func InserirProdutos(produtosJSON string, cnpjEmit string) error {
 			return nil
 		}
 
-		cEAN, cEANOK := prod["CEAN"].(string)
+		cEAN := prod["CEAN"].(string)
 
-		// Verifica se o EAN já existe no banco de dados
-		query := "SELECT count(1) as count FROM tbcadprodutos WHERE cEAN = ?"
+		query = "SELECT count(1) as count FROM tbcadprodutos WHERE cEAN = ?"
 		var countEan int
 
-		err := db.QueryRow(query, cEAN).Scan(&countEan)
+		err = db.QueryRow(query, cEAN).Scan(&countEan)
 		if err != nil {
 			return err
 		}
@@ -46,13 +51,13 @@ func InserirProdutos(produtosJSON string, cnpjEmit string) error {
 			return errors.New("EAN já existente")
 		}
 
-		cProd, cProdOK := prod["CProd"].(string)
-		xProd, xProdOK := prod["XProd"].(string)
-		uCom, uComOK := prod["UCom"].(string)
-		qCom, qComOK := prod["QCom"].(string)
-		vUnCom, vUnComOK := prod["VUnCom"].(string)
+		cProd := prod["CProd"].(string)
+		xProd := prod["XProd"].(string)
+		uCom := prod["UCom"].(string)
+		qCom := prod["QCom"].(string)
+		vUnCom := prod["VUnCom"].(string)
 
-		vProd, vProdOK := prod["VProd"].(float64)
+		vProd := prod["VProd"].(float64)
 		vFrete := prod["VFrete"].(float64)
 		vSeg := prod["VSeg"].(float64)
 		vDesc := prod["VDesc"].(float64)
@@ -60,18 +65,14 @@ func InserirProdutos(produtosJSON string, cnpjEmit string) error {
 
 		vCusto := vProd + vFrete + vSeg + vOutro + vDesc
 
-		vMargem := 0.0 //prod["VMargem"].(float64)
+		vMargem := 0.0 // VMargem não está presente no xml
 
 		vPreco := vCusto + vMargem
-		vAdicional := 0.0 //prod["VAdicional"].(string)
+		vAdicional := 0.0 // VMargem não está presente no xml
 
-		if cProdOK && cEANOK && xProdOK && uComOK && qComOK && vUnComOK && vProdOK {
-			_, err := db.Exec(insertStatement, empresaID, cProd, cEAN, xProd, uCom, qCom, vUnCom, vProd, vCusto, vPreco, vMargem, vAdicional)
-			if err != nil {
-				return err
-			}
-		} else {
-			return errors.New("dados de produto inválidos")
+		_, err = db.Exec(insertStatement, empresaID, cProd, cEAN, xProd, uCom, qCom, vUnCom, vProd, vCusto, vPreco, vMargem, vAdicional)
+		if err != nil {
+			return err
 		}
 	}
 
