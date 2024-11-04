@@ -1,8 +1,9 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
-	"fmt"
+	"importa-nfe/internal/core/domain"
 	"importa-nfe/internal/core/ports"
 )
 
@@ -16,16 +17,15 @@ func NewEmpresaRepository(db *sql.DB) ports.EmpresaRepository {
 	}
 }
 
-func (r empresaRepository) VerificarEmit(cnpjEmit string, cnpjLogado string) error {
-	query := "SELECT cnpj FROM tbcadempresa WHERE cnpj = ?"
-	var cnpj string
+func (r empresaRepository) FindByCNPJ(ctx context.Context, CNPJ string) (domain.Empresa, error) {
+	query := "SELECT id, cnpj FROM empresa WHERE cnpj = $1"
 
-	err := r.db.QueryRow(query, cnpjLogado).Scan(&cnpj)
+	var empresa domain.Empresa
+
+	err := r.db.QueryRowContext(ctx, query, CNPJ).Scan(&empresa.ID, &empresa.CNPJ)
 	if err != nil {
-		return err
+		return domain.Empresa{}, err
 	}
 
-	fmt.Println(cnpjEmit, cnpj)
-
-	return nil
+	return empresa, nil
 }

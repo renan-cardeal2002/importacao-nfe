@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"errors"
@@ -18,21 +19,17 @@ func NewDestinatarioRepository(db *sql.DB) ports.DestinatarioRepository {
 	}
 }
 
-func (r destinatarioRepository) InserirDest(destinatarioJSON string, cnpjEmit string) error {
+func (r destinatarioRepository) InserirDest(ctx context.Context, EmpresaID int, destinatarioJSON string) error {
+	query := `
+		INSERT INTO clientes 
+		    (id_empresa, cnpj, x_nome, email, x_lgr, nro, x_cpl, x_bairro, c_mun, cep, fone) 
+		VALUES 
+		    ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`
+
 	var destinatario map[string]interface{}
 	if err := json.Unmarshal([]byte(destinatarioJSON), &destinatario); err != nil {
 		return err
 	}
-
-	query := "SELECT id FROM tbcadempresa WHERE cnpj = ?"
-	var empresaID int
-
-	err := r.db.QueryRow(query, cnpjEmit).Scan(&empresaID)
-	if err != nil {
-		return err
-	}
-
-	insertStatement := "INSERT INTO tbcadcliente (id_empresa, cnpj, xNome, email, xLgr, nro, xCpl, xBairro, cMun, CEP, fone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
 	cnpj, cnpjOK := destinatario["CNPJ"].(string)
 	xNome, xNomeOK := destinatario["XNome"].(string)
@@ -54,7 +51,7 @@ func (r destinatarioRepository) InserirDest(destinatarioJSON string, cnpjEmit st
 	fmt.Println(cnpjOK, xNomeOK, emailOK, xLgrOK, nroOK, xCplOK, xBairroOK, cMunOK, CEPOK, foneOK)
 
 	if cnpjOK && xNomeOK && emailOK && xLgrOK && nroOK && xCplOK && xBairroOK && cMunOK && CEPOK && foneOK {
-		_, err := r.db.Exec(insertStatement, empresaID, cnpj, xNome, email, xLgr, nro, xCpl, xBairro, cMun, CEP, fone)
+		_, err := r.db.ExecContext(ctx, query, EmpresaID, cnpj, xNome, email, xLgr, nro, xCpl, xBairro, cMun, CEP, fone)
 		if err != nil {
 			return err
 		}

@@ -10,6 +10,6 @@ type Handler struct {
 
 func NewHandler(port *Port) Handler {
 	return Handler{
-		Importation: controllers.NewImportationHandler(port.produtosRepository),
+		Importation: controllers.NewImportationHandler(port.produtosRepository, port.destinatarioRepository, port.empresaRepository),
 	}
 }

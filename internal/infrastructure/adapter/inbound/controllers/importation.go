@@ -13,11 +13,14 @@ import (
 type ImportationController struct {
 	produtosRepository     ports.ProdutosRepository
 	destinatarioRepository ports.DestinatarioRepository
+	empresaRepository      ports.EmpresaRepository
 }
 
-func NewImportationHandler(produtosRepository ports.ProdutosRepository) ImportationController {
+func NewImportationHandler(produtosRepository ports.ProdutosRepository, destinatarioRepository ports.DestinatarioRepository, empresaRepository ports.EmpresaRepository) ImportationController {
 	return ImportationController{
-		produtosRepository: produtosRepository,
+		produtosRepository:     produtosRepository,
+		destinatarioRepository: destinatarioRepository,
+		empresaRepository:      empresaRepository,
 	}
 }
 
@@ -148,8 +151,12 @@ func (h ImportationController) GetDestinatario(c *gin.Context) {
 }
 
 func (h ImportationController) InserirNFE(c *gin.Context) {
+	ctx := c.Request.Context()
+
 	nfe := c.DefaultQuery("nfe", "")
 	cnpj := c.DefaultQuery("cnpj", "")
+
+	empresa, err := h.empresaRepository.FindByCNPJ(ctx, cnpj)
 
 	produtos, err := buscaProdutos(nfe)
 	if err != nil {
@@ -169,7 +176,7 @@ func (h ImportationController) InserirNFE(c *gin.Context) {
 		return
 	}
 
-	dest, err := json.Marshal(destinatario)
+	_, err = json.Marshal(destinatario)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -181,7 +188,7 @@ func (h ImportationController) InserirNFE(c *gin.Context) {
 		return
 	}
 
-	err = h.destinatarioRepository.InserirDest(string(dest), cnpj)
+	err = h.destinatarioRepository.InserirDest(ctx, empresa.ID, empresa.CNPJ)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
